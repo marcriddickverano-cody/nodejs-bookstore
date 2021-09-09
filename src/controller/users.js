@@ -6,19 +6,26 @@ const queries = require('../queries/users');
 
 const deleteUser = async (req, res) => {
   const id = req.userData.is_admin ? parseInt(req.params.id) : parseInt(req.userData.user_id);
-  const user_results = await _getByUserId(id);
+  const user = await _getByUserId(id);
 
-  if (user_results) {
-    pool.query(queries.deleteUser, [id], (error, results) => {
-      if (error) {
-        throw error;
-      } else {
-        return res.status(200).send({
-          error: true,
-          message: "User has been deactivated."
-        });
-      }
-    });
+  if (user) {
+    if (user.is_admin) {
+      return res.status(400).send({
+        error: true,
+        message: "Deleting admin account is prohibited as of the moment."
+      });
+    } else {
+      pool.query(queries.deleteUser, [id], (error, results) => {
+        if (error) {
+          throw error;
+        } else {
+          return res.status(200).send({
+            error: true,
+            message: "User has been deactivated."
+          });
+        }
+      });
+    }
   } else {
     return res.status(404).send({
       error: true,

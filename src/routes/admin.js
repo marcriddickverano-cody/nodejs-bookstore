@@ -1,22 +1,21 @@
 const auth = require("../middlewares/admin_auth");
 const router = require("express").Router();
-const bookService = require("../services/books");
-const bookSalesService = require("../services/book_sales");
-const userService = require("../services/users");
+const bookController = require("../controller/books");
+const bookSalesController = require("../controller/book_sales");
+const userController = require("../controller/users");
 
-router.post("/login", userService.login);
+router.post("/login", userController.login);
+router.get("/users", auth, userController.getUsers);
+router.get("/users/:id", auth, userController.getUserById);
+router.put("/users/:id", auth, userController.updateUser);
+router.delete("/users/:id", auth, userController.deleteUser);
 
-router.get("/users", auth, userService.getUsers);
-router.get("/users/:id", auth, userService.getUserById);
-router.put("/users/:id", auth, userService.updateUser);
-router.delete("/users/:id", auth, userService.deleteUser);
+router.get("/books", auth, bookController.getBooks);
+router.get("/books/:id", auth, bookController.getBookById);
+router.post("/books", auth, bookController.addBook);
+router.put("/books/:id", auth, bookController.updateBook);
+router.delete("/books/:id", auth, bookController.deleteBook);
 
-router.get("/books", auth, bookService.getBooks);
-router.get("/books/:id", auth, bookService.getBookById);
-router.post("/books", auth, bookService.addBook);
-router.put("/books/:id", auth, bookService.updateBook);
-router.delete("/books/:id", auth, bookService.deleteBook);
-
-router.get("/books-sales", auth, bookSalesService.getBookSales);
+router.get("/books-sales", auth, bookSalesController.getBookSales);
 
 module.exports = router

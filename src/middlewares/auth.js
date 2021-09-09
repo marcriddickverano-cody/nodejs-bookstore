@@ -11,9 +11,17 @@ module.exports = (req, res, next) => {
       if (error) {
         throw error;
       } 
-      
+
       if (!results.rows.length) {
-        return res.status(403).json({message: "Invalid token."});
+        return res.status(403).json({
+          error: true,
+          message: "Invalid token."
+        });
+      } else if (results.rows[0].deleted_at) {
+        return res.status(440).json({
+          error: true,
+          message: "Session expired. Your account is deactivated."
+        });
       } else {
         decoded.is_admin = results.rows[0].is_admin;
 

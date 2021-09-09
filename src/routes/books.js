@@ -1,9 +1,9 @@
 const auth = require("../middlewares/auth");
 const router = require("express").Router();
-const service = require("../services/books");
+const controller = require("../controller/books");
 
-router.get("/", auth, service.getBooks);
-router.get("/:id", auth, service.getBookById);
-router.post("/purchase", auth, service.purchaseBook);
+router.get("/", auth, controller.getBooks);
+router.get("/:id", auth, controller.getBookById);
+router.post("/purchase", auth, controller.purchaseBook);
 
 module.exports = router
