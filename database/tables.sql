@@ -16,7 +16,7 @@ CREATE TABLE "users" (
     "password" VARCHAR(255) NOT NULL,
     "is_admin" BOOLEAN NOT NULL DEFAULT FALSE,
     "created_at" TIMESTAMPTZ DEFAULT now(),
-    "updated_at" TIMESTAMPTZ DEFAULT now(),
+    "updated_at" TIMESTAMPTZ,
     "deleted_at" TIMESTAMPTZ
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE "books" (
     "price" INT NOT NULL,
     "quantity" INT NOT NULL,
     "created_at" TIMESTAMPTZ DEFAULT now(),
-    "updated_at" TIMESTAMPTZ DEFAULT now(),
+    "updated_at" TIMESTAMPTZ,
     "deleted_at" TIMESTAMPTZ
 );
 
@@ -52,8 +52,25 @@ CREATE TABLE "book_sales" (
     "user_id" INT NOT NULL,
     "quantity" INT NOT NULL,
     "total_price" INT NOT NULL,
-    "created_at" TIMESTAMPTZ DEFAULT now()
+    "created_at" TIMESTAMPTZ DEFAULT now(),
+    "updated_at" TIMESTAMPTZ,
+    "deleted_at" TIMESTAMPTZ
 );
 
 ALTER TABLE "book_sales" ADD FOREIGN KEY ("book_id") REFERENCES "books"("id");
 ALTER TABLE "book_sales" ADD FOREIGN KEY ("user_id") REFERENCES "users"("id");
+
+/*------------------------------- [CREATE CARTS TABLE] -------------------------------*/
+
+CREATE TABLE "carts" (
+    "id" SERIAL PRIMARY KEY,
+    "user_id" INT NOT NULL,
+    "book_id" INT NOT NULL,
+    "quantity" INT NOT NULL,
+    "created_at" TIMESTAMPTZ DEFAULT now(),
+    "updated_at" TIMESTAMPTZ,
+    "deleted_at" TIMESTAMPTZ
+);
+
+ALTER TABLE "book_sales" ADD FOREIGN KEY ("user_id") REFERENCES "users"("id");
+ALTER TABLE "book_sales" ADD FOREIGN KEY ("book_id") REFERENCES "books"("id");
